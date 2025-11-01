@@ -1,36 +1,29 @@
-New-Item -Path . -Name "README.md" -ItemType "file" -Value "# 🎥 Jumbled Video Reconstruction Challenge
 
-This project reconstructs a 10-second 1080p video (30 FPS, 300 frames) whose frames have been randomly shuffled.  
-It restores the original temporal order using frame similarity and deep visual feature analysis.
+🎥 Jumbled Video Reconstruction Challenge
 
----
+This project restores the original order of a 10-second, 1080p (30 FPS) video whose frames have been randomly shuffled.
+It leverages deep visual similarity (ResNet-18) and feature coherence to rebuild the temporal sequence accurately.
 
-## 🧩 Objective
+🧩 Objective
 
-Given `jumbled_video.mp4`, the program:
-1. Extracts frames.
-2. Computes deep visual features using a pretrained **ResNet-18**.
-3. Determines the correct sequential order.
-4. Rebuilds the video in its original order.
+Given a shuffled video (data/jumbled_video.mp4), the system:
 
-Focus areas: **accuracy**, **efficiency**, **parallelism**, and **clarity of design**.
+Extracts individual frames.
 
----
+Generates visual embeddings using a pretrained ResNet-18 model.
 
-## ⚙️ Requirements
+Infers the correct sequential frame order.
 
-Python 3.8 +  
-Install dependencies:
+Rebuilds the video in its original motion flow.
 
-\`\`\`bash
+⚙️ Requirements
+
+Python 3.8 +
+Install dependencies before running any scripts:
+
 pip install opencv-python tqdm numpy torch torchvision pillow
-\`\`\`
 
----
-
-## 🧭 Project Structure
-
-\`\`\`
+📁 Project Structure
 ├── data/
 │   ├── jumbled_video.mp4
 │   ├── frames_jumbled/
@@ -45,71 +38,106 @@ pip install opencv-python tqdm numpy torch torchvision pillow
 ├── reconstruct_sequence.py
 ├── rebuild_video.py
 └── README.md
-\`\`\`
 
----
 
-## 🚀 Usage
+Tip:
+If data/ or output/ folders don’t exist, create them manually before running the scripts.
 
-1. **Extract frames**
-   \`\`\`bash
-   python extract_frames.py
-   \`\`\`
+🚀 Usage & Execution Order
+1️⃣ Extract Frames
 
-2. **Extract frame features**
-   \`\`\`bash
-   python extract_features.py
-   \`\`\`
+Extract all frames from the input video.
 
-3. **Frame order generation**  
-   A NumPy file named \`data/frame_order_final.npy\` is used for the reconstruction step.
+python extract_frames.py
 
-4. **Rebuild the video**
-   \`\`\`bash
-   python rebuild_video.py
-   \`\`\`
 
-5. **Output**  
-   \`output/reconstructed_video_final_smooth.mp4\`
+Input: data/jumbled_video.mp4
 
----
+Output: data/frames_jumbled/frame_0000.jpg …
 
-## ⏱️ Execution Time
+2️⃣ Extract Frame Features
 
-Execution duration for each stage is logged in:
-\`\`\`
-execution_time.txt
-\`\`\`
+Generate and save 512-D feature vectors using ResNet-18.
 
----
+python extract_features.py
 
-## 🧠 Key Design Choices
 
-- **Feature Embedding:** ResNet-18 pretrained on ImageNet for robust frame comparison.  
-- **Similarity Matching:** Frames ordered by feature proximity (temporal coherence).  
-- **Optimization:** GPU acceleration when available.  
-- **Modularity:** Each stage works independently and can be upgraded easily.
+Input: data/frames_jumbled/
 
----
+Output: data/frame_features.npy
 
-## 📂 Deliverables
+3️⃣ Generate Frame Order
 
-- Reconstructed video (\`.mp4\`)
-- Complete source code (this repository)
-- Algorithm explanation (below)
-- Execution-time log
-- Public GitHub repository
+Create the correct order file (frame_order_final.npy).
+This step may use custom logic or a separate similarity model.
 
----
+python reconstruct_sequence.py
 
-## 🏁 Evaluation Metrics
 
-- Frame-wise similarity & average similarity (%)
-- Execution efficiency
-- Algorithmic design & innovation
-- Code clarity and documentation
+Input: data/frames_jumbled/
 
----
+Output: data/frame_order_final.npy
+
+4️⃣ Rebuild the Video
+
+Reconstruct the final smooth video in the correct order.
+
+python rebuild_video.py
+
+
+Inputs:
+
+data/frames_jumbled/
+
+data/frame_order_final.npy
+
+Output:
+
+output/reconstructed_video_final_smooth.mp4
+
+Execution time is logged automatically in execution_time.txt.
+
+🧠 Key Design Choices
+Aspect	Decision	Purpose
+Feature Embedding	ResNet-18 (ImageNet pretrained)	Captures spatial-semantic frame similarity
+Matching Logic	Pairwise feature similarity	Infers temporal coherence
+Optimization	GPU acceleration, batch processing	Speed & scalability
+Modularity	Independent stages	Easy debugging and upgrades
+🧮 Complexity (Approx.)
+Stage	Time Complexity
+Feature extraction	O(N)
+Similarity computation	O(N²)
+Sorting / reconstruction	O(N log N)
+
+For 300 frames, the runtime typically stays within a few seconds on a GPU-enabled system.
+
+⚡ Optimization & Parallelism
+
+CUDA auto-use when available
+
+Batch inference for efficient tensor ops
+
+Vectorized NumPy for similarity computation
+
+Ready for multiprocessing extensions
+
+🧩 Limitations & Future Work
+
+Nearly identical frames can confuse ordering
+
+Optical flow or temporal CNNs could enhance stability
+
+Graph-based order inference may yield global consistency
+
+🎯 Output
+
+✅ Reconstructed video: output/reconstructed_video_final_smooth.mp4
+🕒 Execution log: execution_time.txt
+📊 Metrics: Frame continuity, average similarity (%), runtime efficiency
+
+🏁 Result
+
+The system reconstructs the shuffled video with near-original motion, preserving smooth transitions and temporal integrity.
 
 # 📘 Algorithm Explanation
 
