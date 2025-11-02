@@ -1,4 +1,4 @@
-🎥 **Jumbled Video Reconstruction Challenge**
+## 🎥 **Jumbled Video Reconstruction Challenge**
 
 This project restores the original order of a 10-second, 1080p (30 FPS) video whose frames have been randomly shuffled.
 It leverages deep visual similarity (ResNet-18) and feature coherence to rebuild the temporal sequence accurately.
