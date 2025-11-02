@@ -44,6 +44,7 @@ Tip:
 If data/ or output/ folders don’t exist, create them manually before running the scripts.
 
 🚀 Usage & Execution Order
+
 1️⃣ Extract Frames
 
 Extract all frames from the input video.
